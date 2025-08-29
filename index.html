@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта ДПС/ГАИ</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #1a2a6c; color: white; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; text-align: center; }
+        header { background: linear-gradient(90deg, #ff7e00, #ff0000); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .map-container { height: 500px; background: #2a2a2a; border-radius: 10px; border: 3px solid #ff7e00; display: flex; align-items: center; justify-content: center; }
+        .btn { padding: 15px 25px; background: #ff7e00; color: white; border: none; border-radius: 8px; margin: 10px; cursor: pointer; }
+        .legend { background: #2d2d2d; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .legend-item { display: flex; align-items: center; margin: 10px 0; justify-content: center; }
+        .color-box { width: 20px; height: 20px; border-radius: 50%; margin-right: 15px; border: 2px solid white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚓 Карта ДПС/ГАИ</h1>
+            <p>Технические работы. Карта скоро будет доступна.</p>
+        </header>
+        
+        <div>
+            <button class="btn" onclick="alert('Функция временно недоступна')">Добавить метки</button>
+            <button class="btn" onclick="alert('Функция временно недоступна')">Центрировать</button>
+            <button class="btn" onclick="alert('Функция временно недоступна')">Очистить</button>
+        </div>
+
+        <div class="legend">
+            <h3>Легенда карты</h3>
+            <div class="legend-item"><div class="color-box" style="background:#ff0000"></div><span>Активный пост ДПС</span></div>
+            <div class="legend-item"><div class="color-box" style="background:#ff7e00"></div><span>Патруль ДПС</span></div>
+            <div class="legend-item"><div class="color-box" style="background:#ffff00"></div><span>Старая информация</span></div>
+        </div>
+
+        <div class="map-container">
+            <div>
+                <h2>🔄 Карта временно недоступна</h2>
+                <p>Идут технические работы</p>
+                <p>Попробуйте позже или обновите страницу</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
