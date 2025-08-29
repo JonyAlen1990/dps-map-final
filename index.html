@@ -4,45 +4,336 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта ДПС/ГАИ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { background: #1a2a6c; color: white; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; text-align: center; }
-        header { background: linear-gradient(90deg, #ff7e00, #ff0000); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .map-container { height: 500px; background: #2a2a2a; border-radius: 10px; border: 3px solid #ff7e00; display: flex; align-items: center; justify-content: center; }
-        .btn { padding: 15px 25px; background: #ff7e00; color: white; border: none; border-radius: 8px; margin: 10px; cursor: pointer; }
-        .legend { background: #2d2d2d; padding: 20px; border-radius: 10px; margin: 20px 0; }
-        .legend-item { display: flex; align-items: center; margin: 10px 0; justify-content: center; }
-        .color-box { width: 20px; height: 20px; border-radius: 50%; margin-right: 15px; border: 2px solid white; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Arial', sans-serif; 
+        }
+        
+        body { 
+            background: linear-gradient(135deg, #1a2a6c, #2a4b8c);
+            color: white; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        
+        header { 
+            text-align: center; 
+            padding: 30px; 
+            background: linear-gradient(90deg, #ff7e00, #ff0000); 
+            border-radius: 15px; 
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .map-container { 
+            height: 500px; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            margin-bottom: 25px; 
+            background: #2a2a2a; 
+            position: relative;
+            border: 3px solid #ff7e00;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        #map { 
+            height: 100%; 
+            width: 100%; 
+        }
+        
+        .controls { 
+            display: flex; 
+            gap: 15px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn { 
+            padding: 15px 25px; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff7e00, #ff0000);
+            color: white; 
+            transition: all 0.3s ease;
+            min-width: 200px;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, #ff8c1a, #ff1a1a);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(255, 126, 0, 0.3);
+        }
+        
+        .loading { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            text-align: center; 
+            color: white; 
+            z-index: 1000;
+        }
+        
+        .error { 
+            color: #ff4444; 
+            background: rgba(255, 68, 68, 0.1); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin: 15px 0; 
+            border: 1px solid #ff4444;
+            text-align: center;
+        }
+        
+        .legend { 
+            background-color: rgba(45, 45, 45, 0.9); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .legend h3 { 
+            margin-bottom: 15px; 
+            color: #ff7e00; 
+            font-size: 1.3rem; 
+        }
+        
+        .legend-item { 
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 12px; 
+        }
+        
+        .color-box { 
+            width: 24px; 
+            height: 24px; 
+            border-radius: 50%; 
+            margin-right: 15px; 
+            border: 2px solid white; 
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 768px) { 
+            .controls { 
+                flex-direction: column; 
+            }
+            
+            .btn { 
+                width: 100%; 
+            }
+            
+            h1 { 
+                font-size: 2rem; 
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🚓 Карта ДПС/ГАИ</h1>
-            <p>Технические работы. Карта скоро будет доступна.</p>
+            <p>Отмечайте расположение постов ДПС/ГАИ на карте и предупреждайте других участников</p>
         </header>
         
-        <div>
-            <button class="btn" onclick="alert('Функция временно недоступна')">Добавить метки</button>
-            <button class="btn" onclick="alert('Функция временно недоступна')">Центрировать</button>
-            <button class="btn" onclick="alert('Функция временно недоступна')">Очистить</button>
+        <div class="controls">
+            <button class="btn" onclick="addRandomMarkers()">🎯 Добавить тестовые метки</button>
+            <button class="btn" onclick="centerMap()">📍 Центрировать карту</button>
+            <button class="btn" onclick="clearMarkers()">🧹 Очистить все метки</button>
         </div>
-
+        
         <div class="legend">
-            <h3>Легенда карты</h3>
-            <div class="legend-item"><div class="color-box" style="background:#ff0000"></div><span>Активный пост ДПС</span></div>
-            <div class="legend-item"><div class="color-box" style="background:#ff7e00"></div><span>Патруль ДПС</span></div>
-            <div class="legend-item"><div class="color-box" style="background:#ffff00"></div><span>Старая информация</span></div>
-        </div>
-
-        <div class="map-container">
-            <div>
-                <h2>🔄 Карта временно недоступна</h2>
-                <p>Идут технические работы</p>
-                <p>Попробуйте позже или обновите страницу</p>
+            <h3>📋 Легенда карты</h3>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #ff0000;"></div>
+                <span><strong>Пост ДПС/ГАИ (активный)</strong> - сейчас на месте</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #ff7e00;"></div>
+                <span><strong>Патруль ДПС/ГАИ</strong> - замечен недавно</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #ffff00;"></div>
+                <span><strong>Старая информация</strong> - более 1 часа</span>
             </div>
         </div>
+        
+        <div class="map-container">
+            <div id="map">
+                <div class="loading" id="loading">
+                    <h3>🔄 Загрузка карты...</h3>
+                    <p>Пожалуйста, подождите</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-container"></div>
     </div>
+
+    <!-- Используем CDN который редко блокируется -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        let map;
+        let markers = [];
+        let mapInitialized = false;
+
+        function showError(message) {
+            const errorContainer = document.getElementById('error-container');
+            errorContainer.innerHTML = <div class="error"><strong>⚠️ Ошибка:</strong> ${message}</div>;
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function initMap() {
+            try {
+                console.log('🔄 Инициализация карты...');
+                
+                // Проверяем что Leaflet загрузился
+                if (typeof L === 'undefined') {
+                    throw new Error('Библиотека карт не загрузилась');
+                }
+                
+                // Создаем карту с координатами Москвы
+                map = L.map('map').setView([55.7558, 37.6176], 12);
+                
+                // Добавляем слой OpenStreetMap
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+                
+                // Скрываем сообщение о загрузке
+                hideLoading();
+                mapInitialized = true;
+                
+                console.log('✅ Карта успешно загружена!');
+                
+                // Добавляем обработчик кликов по карте
+                map.on('click', function(e) {
+                    if (confirm('Добавить метку ДПС/ГАИ в этом месте?')) {
+                        addMarker(e.latlng.lat, e.latlng.lng);
+                    }
+                });
+                
+                // Добавляем несколько тестовых маркеров
+                addTestMarkers();
+                
+            } catch (error) {
+                console.error('❌ Ошибка инициализации карты:', error);
+                showError('Не удалось загрузить карту. Попробуйте обновить страницу или отключить блокировщик рекламы.');
+                hideLoading();
+            }
+        }
+
+        function addMarker(lat, lng, type = 'active') {
+            if (!mapInitialized) {
+                showError('Карта еще не загрузилась');
+                return;
+            }
+            
+            let color;
+            let title;
+            
+            switch(type) {
+                case 'active':
+                    color = '#ff0000';
+                    title = 'Активный пост ДПС/ГАИ';
+                    break;
+                case 'patrol':
+                    color = '#ff7e00';
+                    title = 'Патруль ДПС/ГАИ';
+                    break;
+                case 'old':
+                    color = '#ffff00';
+                    title = 'Старая информация о ДПС/ГАИ';
+                    break;
+                default:
+                    color = '#ff0000';
+                    title = 'Пост ДПС/ГАИ';
+            }
+            
+            // Создаем кастомную иконку
+            const icon = L.divIcon({
+                className: 'custom-marker',
+                html: <div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+            
+            // Добавляем маркер на карту
+            const marker = L.marker([lat, lng], { icon: icon })
+                .addTo(map)
+                .bindPopup(<strong>${title}</strong><br>Широта: ${lat.toFixed(6)}<br>Долгота: ${lng.toFixed(6)});
+            
+            markers.push(marker);
+        }
+
+        function addTestMarkers() {
+            // Добавляем несколько тестовых маркеров вокруг Москвы
+            addMarker(55.7558, 37.6176, 'active');
+            addMarker(55.7517, 37.6178, 'patrol');
+            addMarker(55.7490, 37.6220, 'old');
+            addMarker(55.7600, 37.6250, 'active');
+            addMarker(55.7500, 37.6100, 'patrol');
+        }
+
+        function addRandomMarkers() {
+            if (!mapInitialized) {
+                showError('Карта еще не загрузилась');
+                return;
+            }
+            
+            clearMarkers();
+            addTestMarkers();
+        }
+
+        function centerMap() {
+            if (mapInitialized) {
+                map.setView([55.7558, 37.6176], 12);
+            } else {
+                showError('Карта еще не загрузилась');
+            }
+        }
+
+        function clearMarkers() {
+            if (!mapInitialized) return;
+            
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        // Инициализация карты после загрузки страницы
+        window.addEventListener('load', function() {
+            // Даем время на загрузку всех ресурсов
+            setTimeout(initMap, 100);
+        });
+
+        // Резервная инициализация через 3 секунды
+        setTimeout(function() {
+            if (!mapInitialized && typeof L !== 'undefined') {
+                initMap();
+            }
+        }, 3000);
+    </script>
 </body>
 </html>
